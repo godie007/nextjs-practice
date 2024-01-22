@@ -1,15 +1,17 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import UiProvider from '@/lib/UiProvider';
-import NavBarComponent from '@/components/NavBarComponent';
-import ReduxProvider from '@/redux/provider';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
+import UiProvider from "@/lib/UiProvider";
+import NavBarComponent from "@/components/NavBarComponent";
+import ReduxProvider from "@/redux/provider";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'ToDo App',
-  description: 'Created Using Next.js 14 and Next UI',
+  title: "ToDo App",
+  description: "Created Using Next.js 14 and Next UI",
 };
 
 export default function RootLayout({
@@ -22,6 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <UiProvider>
+            <ToastContainer />
             <NavBarComponent />
             <main>{children}</main>
           </UiProvider>
