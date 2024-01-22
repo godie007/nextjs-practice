@@ -10,6 +10,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { addSession } from "@/redux/features/session-slice";
 
+// Environment variables import
+import { API_URL } from "@/app/utils/environment";
+
 function setCookie(name: string, value: string, days: number) {
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + days);
@@ -28,13 +31,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const response = await axios.post(
-      "https://iot.codytion.com/api/v1/user/login",
-      {
-        username: email,
-        password,
-      }
-    );
+    const response = await axios.post(`${API_URL}/login`, {
+      username: email,
+      password,
+    });
     // se almacene en una cookie el token de la sesion por 1 dia
     setCookie("token", response.data.token, 7);
 
