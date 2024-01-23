@@ -63,15 +63,6 @@ export default function Login() {
       );
 
       if (recaptchaVerificationResponse.data.success) {
-        toast.success("Datos verificados, espera por favor...", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
         // If the user has marked the reCAPTCHA, proceed with the login request
         const response = await axios.post(`${API_URL}/login`, {
           username: email,
