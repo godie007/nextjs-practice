@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import { addSession } from "@/redux/features/session-slice";
+import { toggleVisibility } from "@/redux/features/visibility-slice";
+
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
 
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -36,6 +40,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
+
+  const isVisible = useSelector(
+    (state: RootState) => state.visibility.isVisible
+  );
+
+  const handleToggleVisibility = () => {
+    dispatch(toggleVisibility());
+  };
 
   const handleRecaptchaChange = (token: string | null) => {
     setRecaptchaValue(token);
@@ -112,7 +124,7 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="w-96">
-        <div className="flex flex-col space-y-4 items-center justify-center">
+        <div className="max-w-xs flex flex-col space-y-4 items-center justify-center">
           <Input
             label="Email"
             value={email}
@@ -129,26 +141,39 @@ export default function Login() {
               }
             }}
             variant="bordered"
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={handleToggleVisibility}
+              >
+                {isVisible ? (
+                  <IoMdEyeOff className="text-2xl text-default-400 pointer-events-none" />
+                ) : (
+                  <IoMdEye className="text-2xl text-default-400 pointer-events-none" />
+                )}
+              </button>
+            }
+            type={isVisible ? "text" : "password"}
           />
           <ReCAPTCHA
             sitekey={RECAPTCHA_SITE_KEY}
             onChange={handleRecaptchaChange}
           />
-        </div>
-
-        <div className="flex justify-center mt-4">
-          <Button
-            color="primary"
-            variant="solid"
-            onClick={() => handleSubmit()}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                handleSubmit();
-              }
-            }}
-          >
-            Login
-          </Button>
+          <div className="flex justify-center mt-4">
+            <Button
+              color="primary"
+              variant="solid"
+              onClick={() => handleSubmit()}
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
+            >
+              Login
+            </Button>
+          </div>
         </div>
       </div>
     </div>
